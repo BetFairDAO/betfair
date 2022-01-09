@@ -9,6 +9,7 @@
   "author": "Coin God",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^17.0.8",
     "express": "^4.17.2"
   }
 }
