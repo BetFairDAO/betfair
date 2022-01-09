@@ -1,0 +1,14 @@
+{
+  "name": "betfair-api",
+  "version": "1.0.0",
+  "description": "Server code for betfair web app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Coin God",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
