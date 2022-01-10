@@ -1,7 +1,7 @@
 class Roulette {
     constructor(spinInterval, spinlength) {
-        this._spinInterval = this._spinInterval;
-        this._spinLength = this._spinLength;
+        this._spinInterval = spinInterval;
+        this._spinLength = spinlength;
         this._updateGameOdds();
     }
     _updateGameOdds() {
