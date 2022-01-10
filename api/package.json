@@ -10,6 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^17.0.8",
-    "express": "^4.17.2"
-  }
+    "express": "^4.17.2",
+    "mysql2": "^2.3.3"
+  },
+  "devDependencies": {
+    "@types/mysql2": "github:types/mysql2"
+  },
+  "type": "module"
 }

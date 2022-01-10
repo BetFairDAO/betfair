@@ -1,20 +1,22 @@
 class Roulette {
     constructor(spinInterval, spinlength) {
-        this.spinInterval = this.spinInterval;
-        this.spinLength = this.spinLength;
+        this._spinInterval = this._spinInterval;
+        this._spinLength = this._spinLength;
+        this._updateGameOdds();
     }
-    _getLatestOdds() {
+    _updateGameOdds() {
     }
     _spin() {
     }
     start() {
-        if (this.spinTimer === undefined) {
-            this.spinTimer = setInterval(this._spin, this.spinInterval);
+        if (this._spinTimer === undefined) {
+            this._spinTimer = setInterval(this._spin, this._spinInterval);
         }
     }
     stop() {
-        clearInterval(this.spinTimer);
-        this.spinTimer = undefined;
+        clearInterval(this._spinTimer);
+        this._spinTimer = undefined;
     }
 }
+export {};
 //# sourceMappingURL=roulette.js.map

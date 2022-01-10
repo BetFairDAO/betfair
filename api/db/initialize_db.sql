@@ -1,0 +1,15 @@
+CREATE TABLE Game (
+    GameId INT NOT NULL AUTO_INCREMENT,
+    GameName VARCHAR(20) NOT NULL,
+    TotalGameCycles INT DEFAULT 0,
+    PRIMARY KEY (GameId)
+);
+
+CREATE TABLE GameOdds (
+    GameOddsId INT NOT NULL AUTO_INCREMENT,
+    GameId INT NOT NULL,
+    OddsName VARCHAR(20) NOT NULL,
+    Odds DECIMAL(1,4) NOT NULL,
+    PRIMARY KEY (GameOddsId, GameId),
+    FOREIGN KEY (GameId) REFERENCES Game(GameId)
+);

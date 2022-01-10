@@ -1,4 +1,4 @@
-import { RouletteSquare, SquareColor } from './utils/roulette_types.js';
+import { RouletteSquare } from './utils/roulette_types.js';
 
 class Roulette {
     private _spinInterval: number;
