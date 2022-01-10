@@ -30,7 +30,11 @@ export default class MysqlDb {
                 const rows = result[0];
                 var odds = [];
                 for (let i in rows) {
-                    odds.push(rows[i]);
+                    const row = rows[i];
+                    odds.push({
+                        OddsName: row.OddsName,
+                        Odds: Number(row.Odds)
+                    });
                 }
                 return odds;
             });
