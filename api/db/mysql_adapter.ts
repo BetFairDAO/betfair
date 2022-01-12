@@ -19,31 +19,4 @@ export default class MysqlDb {
             database: database
         };
     }
-
-    /**
-     * Returns the current odds of each roulette square in the database
-     * @returns Promise returning an array of RouletteSquare objects
-     */
-    async getRouletteOdds(): Promise<Array<RouletteSquare>> {
-        const connection = await createConnection(this._connectionParams);
-        const queryStr = `
-            SELECT o.OddsName, o.Odds
-            FROM Game g, GameOdds o
-            WHERE g.GameName='roulette' AND g.GameId=o.GameId;
-        `;
-        
-        const gameOdds = await connection.query(queryStr).then(result => {
-            const rows = result[0];
-            var odds: Array<RouletteSquare> = [];
-            for (let i in rows) {
-                const row = rows[i];
-                odds.push({
-                    OddsName: row.OddsName,
-                    Odds: Number(row.Odds)
-                });
-            }
-            return odds;
-        });
-        return gameOdds;
-    }
 }
