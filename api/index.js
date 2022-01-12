@@ -7,7 +7,7 @@
 import express from 'express';
 import MysqlDb from './db/mysql_adapter.js';
 import EventEmitter from 'events';
-import Roulette from './roulette.js';
+import Roulette from './roulette/roulette.js';
 
 const app = express();
 const PORT = process.env.PORT || 2000;
