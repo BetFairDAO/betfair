@@ -5,24 +5,23 @@
  */
 
 import express from 'express';
-import http from 'http';
 import MysqlDb from './db/mysql_adapter.js';
-import EventEmitter from 'events';
 import Roulette from './roulette/roulette.js';
-import SocketManager from './utils/socket_manager.js';
-import { SocketEvents } from './utils/socket_types.js';
 
 const app = express();
 const PORT = process.env.PORT || 2000;
 const db = new MysqlDb('127.0.0.1', 3306, 'root', '', 'betfairDB');
-var em = new EventEmitter();
-const httpServer = http.createServer(app);
-const socketManager = new SocketManager(httpServer);
 
-const rouletteGame = new Roulette(500, em, socketManager);
+// Initialize game with 1 table
+const roulette = new Roulette();
+roulette.createInstance();
 
 app.get('/', (req, res) => {
     res.send('Server is running');
+});
+
+app.get('/get-roulette-tables', (req, res) => {
+    res.send(JSON.stringify({"active-instances": roulette.getActiveInstances()}));
 });
 
 app.listen(PORT, _ => {

@@ -1,65 +1,38 @@
 /**
  * roulette.ts
- * 
- * The Roulette class is responsible for one "table" of roulette, which is equivalent to one game instance.
  */
 
-import { EventEmitter } from 'stream';
-import { RouletteEvents, RouletteWheel } from '../utils/roulette_types.js';
-import SocketManager from '../utils/socket_manager.js';
-import { SocketEvents } from '../utils/socket_types.js';
+import RouletteInstance from "./rouletteinstance.js";
 
 export default class Roulette {
-    private _spinInterval: number;
-    private _spinTimer: NodeJS.Timer;
-    private _numSquares: number;
-    private _em: EventEmitter;
-    private _socketManager: SocketManager;
+    private _instances: Set<RouletteInstance>;
+    private _openPort: number;
 
-
-    constructor (spinInterval: number, em: EventEmitter, socketManager: SocketManager) {
-        this._spinInterval = spinInterval;
-        this._em = em;
-        this._socketManager = socketManager;
-
-        this._em.on(RouletteEvents.SPIN_COMPLETE, result => {
-            // TODO: Web3 integraion -> send spin result to smart contract to handle payout determination
-            this._socketManager.broadcast(SocketEvents.SPIN_COMPLETE, result);
-
-            // TODO: Web3 integraion -> query smart contract to get total payouts, betting data & store in database
-        });
+    constructor() {
+        this._instances = new Set();
+        this._openPort = 4000;
     }
 
     /**
-     * Runs a game epoch of roulette. A random wheel square is selected and emitted on the SPIN_COMPLETE Roulette Event.
+     * Returns port number and number of connected clients for each active game instance
+     * @returns Array containing [active port, number of connected clients]
      */
-    private _spin() {
-        // Generate the winning number
-        const winningNum = Math.floor(Math.random() * this._numSquares) + 1;
-        // If the selected number is even, color is black
-        const winningSquare = {
-            num: winningNum,
-            color: RouletteWheel[winningNum]
-        };
-
-        // Emit spin event with result
-        this._em.emit(RouletteEvents.SPIN_COMPLETE, winningSquare);
-    }
-
-    /**
-     * Starts the game loop
-     */
-    start() {
-        if (this._spinTimer === undefined) {
-            this._spinTimer = setInterval(this._spin, this._spinInterval);
+    getActiveInstances(): Array<Array<number>> {
+        var activePorts = new Array<Array<number>>();
+        for (let instance of this._instances) {
+            activePorts.push([instance.getPort(), instance.getConnectedClients()])
         }
+        return activePorts
     }
 
-    /**
-     * Stops the game loop
-     */
-    stop() {
-        clearInterval(this._spinTimer);
-        this._spinTimer = undefined;
+    createInstance() {
+        const newInst = new RouletteInstance(500, this._openPort);
+        this._instances.add(newInst);
+
+        this._openPort += 1;
+    }
+
+    removeInstance(port: number) {
+        // Removes instance by port #
     }
 }

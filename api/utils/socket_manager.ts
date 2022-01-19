@@ -8,18 +8,26 @@
 import { Server, Socket } from "socket.io";
 import { SocketEvents } from "./socket_types";
 import * as http from 'http';
+import express, {Application} from "express";
 
 export default class SocketManager {
     private _clientSockets: Set<Socket>;
+    private _expressApp: Express.Application;
+    private _httpServer: http.Server;
     private _socketServer: Server;
+    private _serverPort: number;
 
     /**
      * SocketManager Constructor
      * @param httpServer HttpServer instance with which the socket will be connected to
      */
-    constructor(httpServer: http.Server) {
+    constructor(port: number) {
         this._clientSockets = new Set();
-        this._socketServer = new Server(httpServer);
+        this._serverPort = port;
+        
+        this._expressApp = express();
+        this._httpServer = new http.Server(this._expressApp);
+        this._socketServer = new Server(this._httpServer);
 
         this._socketServer.on('connection', clientSocket => {
             this._clientSockets.add(clientSocket);
@@ -27,6 +35,7 @@ export default class SocketManager {
                 this._clientSockets.delete(clientSocket);
             });
         });
+        this._httpServer.listen(this._serverPort);
     }
 
     /**
@@ -46,5 +55,20 @@ export default class SocketManager {
      */
     getConnectedSockets(): number {
         return this._clientSockets.size;
+    }
+
+    /**
+     * Returns the port number for the socket instance
+     * @returns Port # for socket instance
+     */
+    getSocketPort() {
+        return this._serverPort;
+    }
+
+    /**
+     * Stop the server
+     */
+    close() {
+        this._httpServer.close();
     }
 }
